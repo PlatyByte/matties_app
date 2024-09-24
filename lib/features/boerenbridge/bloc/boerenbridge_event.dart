@@ -39,3 +39,8 @@ final class ReorderPlayerEvent extends BoerenbridgeEvent {
         DateTime.now(),
       ];
 }
+
+final class StartPlayingEvent extends BoerenbridgeEvent {
+  @override
+  List<Object?> get props => [];
+}

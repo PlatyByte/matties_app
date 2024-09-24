@@ -13,6 +13,7 @@ class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState> {
     on<AddPlayerEvent>(_onAddPlayer);
     on<RemovePlayerEvent>(_onRemovePlayer);
     on<ReorderPlayerEvent>(_onReorderPlayer);
+    on<StartPlayingEvent>(_onStartPlaying);
   }
 
   FutureOr<void> _onAddPlayer(
@@ -51,5 +52,17 @@ class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState> {
     players.insert(newIndex, player);
 
     emit(SelectingPlayersState(players));
+  }
+
+  FutureOr<void> _onStartPlaying(
+    StartPlayingEvent event,
+    Emitter<BoerenbridgeState> emit,
+  ) {
+    emit(
+      ShuffleCardsState(
+        Map.fromIterable(state.players, value: (element) => 0),
+        cardsInHand: 7,
+      ),
+    );
   }
 }
