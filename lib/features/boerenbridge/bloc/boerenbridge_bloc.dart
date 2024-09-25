@@ -2,19 +2,27 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:matties_app/core/bloc/change_notifier_bloc.dart';
 import 'package:matties_app/core/model/model.dart';
 
 part 'boerenbridge_event.dart';
 
 part 'boerenbridge_state.dart';
 
-class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState> {
-  BoerenbridgeBloc() : super(const SelectingPlayersState([])) {
+class BoerenbridgeBloc
+    extends ChangeNotifierBloc<BoerenbridgeEvent, BoerenbridgeState> {
+  BoerenbridgeBloc()
+      : super(const SelectingPlayersState([]), notifyGuard: gameStartsOrStops) {
     on<AddPlayerEvent>(_onAddPlayer);
     on<RemovePlayerEvent>(_onRemovePlayer);
     on<ReorderPlayerEvent>(_onReorderPlayer);
     on<StartPlayingEvent>(_onStartPlaying);
   }
+
+  static bool gameStartsOrStops(Change<BoerenbridgeState> change) =>
+      change.currentState is PlayingState &&
+          change.nextState is! PlayingState ||
+      change.currentState is! PlayingState && change.nextState is PlayingState;
 
   FutureOr<void> _onAddPlayer(
     AddPlayerEvent event,
