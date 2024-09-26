@@ -44,3 +44,30 @@ final class StartPlayingEvent extends BoerenbridgeEvent {
   @override
   List<Object?> get props => [];
 }
+
+final class StopPlayingEvent extends BoerenbridgeEvent {
+  const StopPlayingEvent({this.results});
+
+  final Map<Matties, int>? results;
+
+  @override
+  List<Object?> get props => [results];
+}
+
+final class EstimatedTricksEvent extends BoerenbridgeEvent {
+  const EstimatedTricksEvent(this.estimates);
+
+  final Map<Matties, int> estimates;
+
+  @override
+  List<Object?> get props => [estimates];
+}
+
+final class AchievedTricksEvent extends BoerenbridgeEvent {
+  const AchievedTricksEvent(this.actuals);
+
+  final Map<Matties, int> actuals;
+
+  @override
+  List<Object?> get props => [actuals];
+}

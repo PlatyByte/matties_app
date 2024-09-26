@@ -20,40 +20,34 @@ sealed class PlayingState extends BoerenbridgeState {
   const PlayingState(
     this.score, {
     required this.cardsInHand,
+    required this.goingDown,
   });
 
   @override
   List<Matties> get players => score.keys.toList();
 
+  Matties get shuffler => players.first;
+
   final Map<Matties, int> score;
   final int cardsInHand;
-}
-
-final class ShuffleCardsState extends PlayingState {
-  const ShuffleCardsState(
-    super.score, {
-    required super.cardsInHand,
-  });
-
-  Matties get shuffler => players.first;
+  final bool goingDown;
 }
 
 final class EstimateTricksState extends PlayingState {
   const EstimateTricksState(
     super.score, {
     required super.cardsInHand,
-    required this.estimates,
+    required super.goingDown,
   });
-
-  final Map<Matties, int> estimates;
 }
 
 final class InsertTricksState extends PlayingState {
   const InsertTricksState(
     super.score, {
     required super.cardsInHand,
-    required this.actuals,
+    required super.goingDown,
+    required this.estimates,
   });
 
-  final Map<Matties, int> actuals;
+  final Map<Matties, int> estimates;
 }
