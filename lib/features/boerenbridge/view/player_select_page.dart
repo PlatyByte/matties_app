@@ -14,7 +14,7 @@ class PlayerSelectPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.playersSelectTitle),
       ),
-      floatingActionButton: const Column(
+      bottomSheet: const Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           StartGameButton(),

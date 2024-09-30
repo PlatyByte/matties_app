@@ -10,7 +10,7 @@ class StartGameButton extends StatelessWidget {
     return BlocSelector<BoerenbridgeBloc, BoerenbridgeState, bool>(
       selector: (state) => state.players.length >= 3,
       builder: (context, enoughPlayers) {
-        return FloatingActionButton(
+        return FilledButton(
           onPressed: !enoughPlayers
               ? null
               : () => context.read<BoerenbridgeBloc>().add(StartPlayingEvent()),

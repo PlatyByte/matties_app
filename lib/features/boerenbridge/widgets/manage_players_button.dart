@@ -10,7 +10,7 @@ class ManagePlayersButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return FilledButton(
       child: const Text('Players'),
       onPressed: () => _showDialog(context),
     );
