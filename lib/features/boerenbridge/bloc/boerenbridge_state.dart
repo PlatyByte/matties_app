@@ -31,6 +31,9 @@ sealed class PlayingState extends BoerenbridgeState {
   final Map<Matties, int> score;
   final int cardsInHand;
   final bool goingDown;
+
+  @override
+  List<Object> get props => [...super.props, score, cardsInHand, goingDown];
 }
 
 final class EstimateTricksState extends PlayingState {
@@ -50,4 +53,7 @@ final class InsertTricksState extends PlayingState {
   });
 
   final Map<Matties, int> estimates;
+
+  @override
+  List<Object> get props => [...super.props, estimates];
 }

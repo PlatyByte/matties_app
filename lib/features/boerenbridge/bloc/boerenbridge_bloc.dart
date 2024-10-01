@@ -21,14 +21,23 @@ extension MapX on Map<dynamic, dynamic> {
 
 class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState>
     with ChangeNotifier {
-  BoerenbridgeBloc() : super(const SelectingPlayersState([])) {
+  BoerenbridgeBloc({
+    this.startingAmountOfCards = 7,
+    this.minAmountOfPlayers = 3,
+    this.maxAmountOfPlayers = 8,
+  }) : super(const SelectingPlayersState([])) {
     on<AddPlayerEvent>(_onAddPlayer);
     on<RemovePlayerEvent>(_onRemovePlayer);
     on<ReorderPlayerEvent>(_onReorderPlayer);
     on<StartPlayingEvent>(_onStartPlaying);
     on<EstimatedTricksEvent>(_onEstimatedTricks);
     on<AchievedTricksEvent>(_onAchievedTricks);
+    on<StopPlayingEvent>(_onStopPlaying);
   }
+
+  final int startingAmountOfCards;
+  final int minAmountOfPlayers;
+  final int maxAmountOfPlayers;
 
   FutureOr<void> _onAddPlayer(
     AddPlayerEvent event,
@@ -75,7 +84,7 @@ class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState>
     emit(
       EstimateTricksState(
         Map.fromIterable(state.players, value: (element) => 0),
-        cardsInHand: 7,
+        cardsInHand: startingAmountOfCards,
         goingDown: true,
       ),
     );
@@ -97,7 +106,7 @@ class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState>
         currentState.score,
         cardsInHand: currentState.cardsInHand,
         estimates: event.estimates,
-        goingDown: true,
+        goingDown: currentState.goingDown,
       ),
     );
   }
@@ -118,22 +127,19 @@ class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState>
       actuals: event.actuals,
     )..moveFirstToLast();
 
-    final stillGoingDown = currentState.cardsInHand == 1
-        ? !currentState.goingDown
-        : currentState.goingDown;
+    final goingUp = !currentState.goingDown || currentState.cardsInHand == 1;
 
-    final nextShuffleAmount = stillGoingDown
-        ? currentState.cardsInHand - 1
-        : currentState.cardsInHand + 1;
+    final nextShuffleAmount =
+        goingUp ? currentState.cardsInHand + 1 : currentState.cardsInHand - 1;
 
-    if (!stillGoingDown && nextShuffleAmount == 8) {
+    if (goingUp && nextShuffleAmount == startingAmountOfCards + 1) {
       add(StopPlayingEvent(results: updatedScore));
     } else {
       emit(
         EstimateTricksState(
           updatedScore,
           cardsInHand: nextShuffleAmount,
-          goingDown: stillGoingDown,
+          goingDown: !goingUp,
         ),
       );
     }
@@ -154,4 +160,9 @@ class BoerenbridgeBloc extends Bloc<BoerenbridgeEvent, BoerenbridgeState>
       }
     });
   }
+
+  FutureOr<void> _onStopPlaying(
+    StopPlayingEvent event,
+    Emitter<BoerenbridgeState> emit,
+  ) {}
 }
