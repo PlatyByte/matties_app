@@ -14,19 +14,23 @@ class PlayerSelectPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.playersSelectTitle),
       ),
-      bottomSheet: const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          StartGameButton(),
-          SizedBox(height: 8),
-          ManagePlayersButton(),
-        ],
+      bottomSheet: const Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            StartGameButton(),
+            SizedBox(height: 8),
+            ManagePlayersButton(),
+          ],
+        ),
       ),
       body: BlocBuilder<BoerenbridgeBloc, BoerenbridgeState>(
         builder: (context, state) {
           if (state.players.isEmpty) {
             return const Center(
-              child: Text('Select some players to start'),
+              child: Text('Gebt wat matties nodig voorda ge kunt spelen'),
             );
           }
           return ReorderableListView(

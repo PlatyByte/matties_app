@@ -35,8 +35,8 @@ class _ScoreFormState extends State<ScoreForm> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                '${widget.state.shuffler.name} should shuffle '
-                '${widget.state.cardsInHand} cards',
+                '${widget.state.shuffler.name} deel keer'
+                '${widget.state.cardsInHand} koarten uit',
               ),
             ),
             const SizedBox(height: 16),
@@ -46,17 +46,17 @@ class _ScoreFormState extends State<ScoreForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text('Player'),
+                    child: Text('Mattie'),
                   ),
                   SizedBox(width: 8),
                   Expanded(
                     flex: 2,
-                    child: Text('Estimate'),
+                    child: Text('Inschatting'),
                   ),
                   SizedBox(width: 8),
                   Expanded(
                     flex: 2,
-                    child: Text('Actual'),
+                    child: Text('Gehaald'),
                   ),
                   SizedBox(width: 8),
                   Expanded(
@@ -135,37 +135,40 @@ class _ScoreFormState extends State<ScoreForm> {
                 },
               ),
             ),
-            FilledButton(
-              onPressed: () {
-                widget.formKey.currentState?.saveAndValidate();
-                final filtered = Map.of(widget.formKey.currentState!.value);
-                if (widget.isEstimating) {
-                  filtered.removeWhere(
-                    (key, value) => key.startsWith('actual'),
-                  );
-                } else {
-                  filtered.removeWhere(
-                    (key, value) => key.startsWith('estimate'),
-                  );
-                }
-                final values = filtered.map<Matties, int>((key, value) {
-                  final mattie = key.split('_')[1];
-                  return MapEntry(
-                    Matties.fromString(mattie),
-                    int.parse(value as String),
-                  );
-                });
-                if (widget.isEstimating) {
-                  context
-                      .read<BoerenbridgeBloc>()
-                      .add(EstimatedTricksEvent(values));
-                } else {
-                  context
-                      .read<BoerenbridgeBloc>()
-                      .add(AchievedTricksEvent(values));
-                }
-              },
-              child: const Text('Enter'),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: FilledButton(
+                onPressed: () {
+                  widget.formKey.currentState?.saveAndValidate();
+                  final filtered = Map.of(widget.formKey.currentState!.value);
+                  if (widget.isEstimating) {
+                    filtered.removeWhere(
+                      (key, value) => key.startsWith('actual'),
+                    );
+                  } else {
+                    filtered.removeWhere(
+                      (key, value) => key.startsWith('estimate'),
+                    );
+                  }
+                  final values = filtered.map<Matties, int>((key, value) {
+                    final mattie = key.split('_')[1];
+                    return MapEntry(
+                      Matties.fromString(mattie),
+                      int.parse(value as String),
+                    );
+                  });
+                  if (widget.isEstimating) {
+                    context
+                        .read<BoerenbridgeBloc>()
+                        .add(EstimatedTricksEvent(values));
+                  } else {
+                    context
+                        .read<BoerenbridgeBloc>()
+                        .add(AchievedTricksEvent(values));
+                  }
+                },
+                child: const Text('Volgende'),
+              ),
             ),
           ],
         ),

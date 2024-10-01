@@ -11,7 +11,7 @@ class ManagePlayersButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilledButton(
-      child: const Text('Players'),
+      child: const Text('Matties toevoegen'),
       onPressed: () => _showDialog(context),
     );
   }
@@ -28,7 +28,7 @@ class ManagePlayersButton extends StatelessWidget {
                 actions: [
                   FilledButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Done'),
+                    child: const Text('Geried'),
                   ),
                 ],
                 content: SizedBox(

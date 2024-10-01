@@ -14,7 +14,7 @@ class StartGameButton extends StatelessWidget {
           onPressed: !enoughPlayers
               ? null
               : () => context.read<BoerenbridgeBloc>().add(StartPlayingEvent()),
-          child: const Icon(Icons.play_arrow),
+          child: const Text('Spele moar!'),
         );
       },
     );
